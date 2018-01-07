@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+		<title>Starter Template - Materialize</title>
+		<!-- CSS  -->
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+		<link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+		<link rel="stylesheet" href="css/jquery-ui.min.css">
+		<link href="plugins/mobiscroll/css/mobiscroll.animation.css" rel="stylesheet" type="text/css" />
+		<link href="plugins/mobiscroll/css/mobiscroll.frame.css" rel="stylesheet" type="text/css" />
+		<link href="plugins/mobiscroll/css/mobiscroll.scroller.css" rel="stylesheet" type="text/css" />
+		<link href="plugins/mobiscroll/css/mobiscroll.image.css" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div id="nav">
+			<div class="navbar-fixed">
+				<nav class="grey lighten-4 main-bar" role="navigation">
+					<div class="nav-wrapper">
+						<a id="logo-container" href="#" class="main-bar-main text-menu">My Portfolio</a>
+						<ul class="right">
+							<li>
+								<a class="nav-link" href="#" id="refresh-coins-btn" style="display: flex;">
+									<i class="material-icons nav-link" style="margin-right: 5px;">sync</i>
+								</a>
+							</li>
+							<li>
+								<a class="nav-link" href="#" id="add-coins-btn" style="display: flex;">
+									<i class="material-icons nav-link" style="margin-right: 5px;">add_circle_outline</i>
+								</a>
+							</li>
+						</ul>
+						<a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons text-menu">menu</i></a>
+					</div>
+				</nav>
+			</div>
+			<ul id="nav-mobile" class="side-nav fixed">
+				<li class="side-main"><span class="side-title">MyCryptoAssets</span><span class="side-title-sub">Crypto portfolio tracker</span></li>
+				<li id="nav-portfolio" class="active"><a data-content="portfolio" class="nav-link side-menu-btn" href="#"><i class="material-icons nav-link">account_balance_wallet</i>My Portfolio</a></li>
+				<li id="nav-tickers" ><a data-content="tickers" class="nav-link side-menu-btn" href="#"><i class="material-icons nav-link">insert_chart</i>Tickers</a></li>
+				<li id="nav-settings" ><a data-content="settings" class="nav-link side-menu-btn" href="#"><i class="material-icons nav-link">settings</i>Settings</a></li>
+			</ul>
+		</div>
+
+		<main class="main-content grey lighten-4">
+			<div id="main-portfolio" class="section no-pad-bot active">
+				<div class="progress">
+					<div class="indeterminate"></div>
+				</div>
+				
+				<div class="container" style="width: 85% !important;">
+					<h1 class="header center light-blue-text main-profit" style="margin-bottom:0px;">1920.01</h1>
+					<h4 class="header center light-gray-text main-profit-currency" style="margin-top:0px;"><i class="material-icons">arrow_upward</i> 6.34 %</h4>
+					<div class="row">
+						<ul class="coins-balance-list">
+						</ul>
+					</div>
+					<br><br>
+				</div>
+			</div>
+
+			<div id="main-tickers" class="section no-pad-bot" style="display: none;">
+				<div class="container" style="width: 85% !important;">
+					<div class="row">
+						<ul class="main-settings-list">
+						</ul>
+					</div>
+					<br><br>
+				</div>
+			</div>
+
+			<div id="main-settings" class="section no-pad-bot" style="display: none;">
+				<div class="container" style="width: 85% !important;">
+					<div class="row">
+						<ul class="main-settings-list">
+
+							<li>
+								<div class="col s12 m12 no-padding">
+									<div class="col s8 m10">
+										<span class="coin-name">Refresh data interval</span>
+									</div>
+									<div class="col s4 m2 text-right">
+										<div class="input-field col s12">
+											<select class="settings-select" id="settings-refresh_interval_mins">
+												<option value="5">5 Mins</option>
+												<option value="15">15 Mins</option>
+												<option value="60">1 Hour</option>
+												<option value="720">12 Hours</option>
+												<option value="1440">24 Hours</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</li>
+
+							<li>
+								<div class="col s12 m12 no-padding">
+									<div class="col s8 m10">
+										<span class="coin-name">Currency decimals</span>
+									</div>
+									<div class="col s4 m2 text-right">
+										<div class="input-field col s12">
+											<select class="settings-select" id="settings-currency_decimals">
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</li>
+
+							<li>
+								<div class="col s12 m12 no-padding">
+									<div class="col s8 m10">
+										<span class="coin-name">Crypto decimals</span>
+									</div>
+									<div class="col s4 m2 text-right">
+										<div class="input-field col s12">
+											<select class="settings-select" id="settings-crypto_decimals">
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</li>
+
+							<li>
+								<div class="col s12 m12 no-padding">
+									<div class="col s8 m10">
+										<span class="coin-name">Decimal separator</span>
+									</div>
+									<div class="col s4 m2 text-right">
+										<div class="input-field col s12">
+											<select class="settings-select" id="settings-decimal_separator">
+												<option value=".">Dot</option>
+												<option value=",">Comma</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</li>
+
+							<li>
+								<div class="col s12 m12 no-padding">
+									<div class="col s8 m10">
+										<span class="coin-name">Thousands separator</span>
+									</div>
+									<div class="col s4 m2 text-right">
+										<div class="input-field col s12">
+											<select class="settings-select" id="settings-thousands_separator">
+												<option value=".">Dot</option>
+												<option value=",">Comma</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</li>
+
+							<li class="waves-effect waves">
+								<div class="col s12 m12 no-padding">
+									<div class="col s12 m12">
+										<span class="coin-name">Delete all data</span>
+									</div>
+								</div>
+							</li>
+
+						</ul>
+					</div>
+					<br><br>
+				</div>
+			</div>
+
+		</main>
+
+
+		<select id="coins_list" style="display: none;">
+			<optgroup label="B">
+				<option value="bitcoin">Bitcoin</option>
+				<option value="bitcoin_cash">Bitcoin Cash</option>
+			</optgroup>
+			<optgroup label="L">
+				<option value="litecoin">Litecoin</option>
+			</optgroup>
+			<optgroup label="E">
+				<option value="ethereum">Ethereum</option>
+			</optgroup>
+		</select>
+		<select id="currency_list" style="display: none;">
+			<option value="usd">USD</option>
+			<option value="eur">EUR</option>
+		</select>
+		<select id="type_list" style="display: none;">
+			<option value="coin">Coin ticker</option>
+			<option value="watch">Watch Address</option>
+		</select>
+
+		<select id="token_list" style="display: none;">
+			<optgroup label="USA">
+				<option value="1">Atlanta</option>
+				<option value="2">Boston</option>
+				<option value="3">Chicago</option>
+				<option value="4">Los Angeles</option>
+				<option value="5">New York</option>
+				<option value="6">San Francisco</option>
+			</optgroup>
+		</select>
+
+		<!-- Modal Structure -->
+		<div id="input-address-modal" class="modal modal-fixed-footer">
+			<div class="modal-content" style="overflow: hidden;">
+				<div class="row">
+						<div class="row">
+							<div class="input-field col s12">
+								<input placeholder="Enter you Public Address" id="watch-input-address" type="text" class="validate">
+								<label for="watch-input-address">Enter you Public Address</label>
+							</div>
+						</div>
+					</div>
+			</div>
+			<div class="modal-footer">
+				<a class="waves-effect waves-light btn-flat" id="watch-camera-btn"><i class="material-icons left">camera_alt</i>Camera</a>
+				<a class="modal-action modal-close waves-effect waves-light btn-flat" id="watch-confirm-btn"><i class="material-icons right">send</i>Confirm</a>
+			</div>
+		</div>
+
+		<!--  Scripts-->
+		<script src="js/jquery-2.1.1.min.js"></script>
+		<script src="js/materialize.js"></script>
+		<script src="plugins/mobiscroll/js/mobiscroll.core.js"></script>
+		<script src="plugins/mobiscroll/js/mobiscroll.frame.js"></script>
+		<script src="plugins/mobiscroll/js/mobiscroll.scroller.js"></script>
+		<script src="plugins/mobiscroll/js/mobiscroll.select.js"></script>
+		<script src="plugins/mobiscroll/js/mobiscroll.listbase.js"></script>
+		<script src="plugins/mobiscroll/js/mobiscroll.image.js"></script>
+
+		<script src="js/manager.js"></script>
+		<script src="js/logic/PortfolioJS.js"></script>
+		<script src="js/logic/storage.js"></script>
+		<script src="js/logic/explorers.js"></script>
+		<script>
+			$( document ).ready(function() {
+
+				$( "#add-coins-btn" ).click(function() {
+					$('#input-address-modal').modal('open');
+				});
+
+				$( "#refresh-coins-btn" ).click(function() {
+					portfolioJS.ReloadData();
+				});
+
+				$( "#watch-confirm-btn" ).click(function() {
+					// Get entered address
+					var address = $("#watch-input-address").val();
+
+					$("#coins_list").mobiscroll('show');
+
+					console.log(address);
+				});
+			});
+
+			$(".button-collapse").sideNav();
+			$('.modal').modal();
+			
+			// Bypass CORS
+			$.support.cors = true;
+			
+			var coins_names_json;
+			
+			var coin_style = document.createElement("style");
+			coin_style.appendChild(document.createTextNode(""));
+			
+			var mobi_coins_inst;
+			var mobi_currency_inst;
+			
+			
+			
+			
+			$('#coins_list').mobiscroll().select({
+				mode: "scroller", // Specify scroller mode like: mode: 'mixed' or omit setting to use default 
+				display: "bottom", // Specify display mode like: display: 'bottom' or omit setting to use default 
+				enhance: true,
+				animate: "slideup",
+				rtl: true,
+        		group: true,
+				onClose: function(event, inst) {
+					$("#currency_list").mobiscroll('show');
+				}
+			
+			});
+			
+			mobi_coins_inst = $('#coins_list').mobiscroll('getInst');
+			
+			$('#currency_list').mobiscroll().select({
+				mode: "scroller", // Specify scroller mode like: mode: 'mixed' or omit setting to use default 
+				display: "bottom", // Specify display mode like: display: 'bottom' or omit setting to use default 
+				lang: "en", // Specify language like: lang: 'pl' or omit setting to use default
+				enhance: true,
+				filter: true,
+				animate: "slideup",
+				onClose: function(event, inst) {
+					setTimeout(function() {
+						//CreateNew_Coin(new_type, "", "");
+						portfolioJS.Wallet_AddNew("coin", "", "");
+			
+					}, 200);
+				}
+			});
+			
+			mobi_currency_inst = $('#currency_list').mobiscroll('getInst');
+			
+			
+			$('#type_list').mobiscroll().select({
+				mode: "scroller", // Specify scroller mode like: mode: 'mixed' or omit setting to use default 
+				display: "bottom", // Specify display mode like: display: 'bottom' or omit setting to use default 
+				lang: "en", // Specify language like: lang: 'pl' or omit setting to use default
+				enhance: true,
+				filter: true,
+				animate: "slideup",
+				onClose: function(event, inst) {
+					setTimeout(function() {
+						if(mobi_type_inst.getVal()=="coin")
+							$("#coins_list").mobiscroll('show');
+					}, 200);
+				}
+			});
+			
+			mobi_type_inst = $('#type_list').mobiscroll('getInst');
+
+			$('#token_list').mobiscroll().select({
+				mode: "scroller", // Specify scroller mode like: mode: 'mixed' or omit setting to use default 
+				display: "bottom", // Specify display mode like: display: 'bottom' or omit setting to use default 
+				lang: "en", // Specify language like: lang: 'pl' or omit setting to use default
+				enhance: true,
+				filter: true,
+				animate: "slideup",
+				onClose: function(event, inst) {
+					setTimeout(function() {
+						portfolioJS.TokenListClick(mobi_token_list.getVal());
+					}, 200);
+				}
+			});
+
+			mobi_token_list = $('#token_list').mobiscroll('getInst');
+
+			// TODO: Should be the first thig to be initialized
+			var portfolioJS = new PortfolioJS();
+			
+			// Info box clicks
+			$(document).on('click', '#main-portfolio .info-box .delete-btn', function(){
+				var coin = GetCoinFromID(this.id);
+				portfolioJS.Wallet_Delete(coin);
+			});
+
+			$(document).on('click', '#main-portfolio .info-box .refresh-btn', function(){
+				var coin = GetCoinFromID(this.id);
+				portfolioJS.Wallet_GetAndUpdateCoinBalance(coin);
+			});
+
+			$(document).on('change', 'select.settings-select', function() {
+				portfolioJS.SaveSettings();
+			});
+		</script>
+	</body>
+</html>
