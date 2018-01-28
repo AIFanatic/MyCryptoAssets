@@ -51,8 +51,8 @@
 				</div>
 				
 				<div class="container" style="width: 85% !important;">
-					<h1 class="header center light-blue-text main-profit" style="margin-bottom:0px;">1920.01</h1>
-					<h4 class="header center light-gray-text main-profit-currency" style="margin-top:0px;"><i class="material-icons">arrow_upward</i> 6.34 %</h4>
+					<h1 id="wallet-info-total_usd" class="header center light-blue-text main-profit-total-usd" style="margin-bottom:0px;">1920.01</h1>
+					<h4 id="wallet-info-change_per" class="header center light-gray-text main-profit-change-per" style="margin-top:0px;"><i class="material-icons">arrow_upward</i> 6.34 %</h4>
 					<div class="row">
 						<ul class="coins-balance-list">
 						</ul>
@@ -83,7 +83,30 @@
 									</div>
 									<div class="col s4 m2 text-right">
 										<div class="input-field col s12">
-											<select class="settings-select" id="settings-refresh_interval_mins">
+											<select class="settings-select" id="settings-refresh_data_mins">
+												<option value="1">1 Min</option>
+												<option value="2">2 Mins</option>
+												<option value="5">5 Mins</option>
+												<option value="15">15 Mins</option>
+												<option value="60">1 Hour</option>
+												<option value="720">12 Hours</option>
+												<option value="1440">24 Hours</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</li>
+
+							<li>
+								<div class="col s12 m12 no-padding">
+									<div class="col s8 m10">
+										<span class="coin-name">Refresh wallet metrics interval</span>
+									</div>
+									<div class="col s4 m2 text-right">
+										<div class="input-field col s12">
+											<select class="settings-select" id="settings-refresh_wallet_metrics_mins">
+												<option value="1">1 Min</option>
+												<option value="2">2 Mins</option>
 												<option value="5">5 Mins</option>
 												<option value="15">15 Mins</option>
 												<option value="60">1 Hour</option>
@@ -243,9 +266,16 @@
 		<script src="plugins/mobiscroll/js/mobiscroll.image.js"></script>
 
 		<script src="js/manager.js"></script>
+
+		<script src="js/logic/Templates.js"></script>
+		<script src="js/logic/Storage.js"></script>
+		<script src="js/logic/Database.js"></script>
 		<script src="js/logic/PortfolioJS.js"></script>
-		<script src="js/logic/storage.js"></script>
-		<script src="js/logic/explorers.js"></script>
+		<script src="js/logic/Helpers.js"></script>
+		<script src="js/logic/Visual.js"></script>
+		<script src="js/logic/Explorers.js"></script>
+		<script src="js/logic/Wallet.js"></script>
+
 		<script>
 			$( document ).ready(function() {
 

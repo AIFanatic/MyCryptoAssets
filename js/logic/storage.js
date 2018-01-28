@@ -66,9 +66,19 @@ var Storage = new function() {
         }
         return null;
     };
-    // End wallet
 
-    // Wallet
+    this.Set_Wallet_Info = function(data){
+        localStorage.setItem("wallet_info", JSON.stringify(data));
+    };
+
+    this.Get_Wallet_Info = function(){
+        var data = localStorage.getItem("wallet_info");
+        if(data && data.constructor === Object){
+            return JSON.parse(data);
+        }
+        return null;
+    };
+
     this.Set_Settings = function(data){
         localStorage.setItem("settings", JSON.stringify(data));
     };

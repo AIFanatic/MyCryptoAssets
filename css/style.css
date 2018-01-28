@@ -35,6 +35,10 @@ body{
 	.main-bar-main{
 		padding-left: 0px !important;
 	}
+
+	.main-profit-total-usd{
+		font-size: 40px;
+	}
 }
 
 .text-menu{
@@ -229,4 +233,3 @@ main ul li{
 	margin-left: 10px;
     margin-right: 10px;
 }
-
