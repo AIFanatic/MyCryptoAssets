@@ -51,8 +51,8 @@
 				</div>
 				
 				<div class="container" style="width: 85% !important;">
-					<h1 id="wallet-info-total_usd" class="header center light-blue-text main-profit-total-usd" style="margin-bottom:0px;">1920.01</h1>
-					<h4 id="wallet-info-change_per" class="header center light-gray-text main-profit-change-per" style="margin-top:0px;"><i class="material-icons">arrow_upward</i> 6.34 %</h4>
+					<h1 id="wallet-current-total-usd" class="header center light-blue-text main-profit-total-usd" style="margin-bottom:0px;">1920.01</h1>
+					<h4 id="wallet-change-total-per" class="header center light-gray-text main-profit-change-per" style="margin-top:0px;"><i class="material-icons">arrow_upward</i> 6.34 %</h4>
 					<div class="row">
 						<ul class="coins-balance-list">
 						</ul>
@@ -64,7 +64,7 @@
 			<div id="main-tickers" class="section no-pad-bot" style="display: none;">
 				<div class="container" style="width: 85% !important;">
 					<div class="row">
-						<ul class="main-settings-list">
+						<ul class="main-tickers-list">
 						</ul>
 					</div>
 					<br><br>
@@ -188,7 +188,7 @@
 								</div>
 							</li>
 
-							<li class="waves-effect waves">
+							<li class="waves-effect waves red lighten-5" id="settings-delete-all">
 								<div class="col s12 m12 no-padding">
 									<div class="col s12 m12">
 										<span class="coin-name">Delete all data</span>
@@ -268,7 +268,6 @@
 		<script src="js/manager.js"></script>
 
 		<script src="js/logic/Templates.js"></script>
-		<script src="js/logic/Storage.js"></script>
 		<script src="js/logic/Database.js"></script>
 		<script src="js/logic/PortfolioJS.js"></script>
 		<script src="js/logic/Helpers.js"></script>
@@ -392,11 +391,16 @@
 
 			$(document).on('click', '#main-portfolio .info-box .refresh-btn', function(){
 				var coin = GetCoinFromID(this.id);
-				portfolioJS.Wallet_GetAndUpdateCoinBalance(coin);
+				portfolioJS.Wallet_RefreshBalance(coin);
 			});
 
 			$(document).on('change', 'select.settings-select', function() {
 				portfolioJS.SaveSettings();
+			});
+
+			// TODO: Should as for confirmation first
+			$(document).on('click', '#settings-delete-all', function(){
+				portfolioJS.DeleteAll();
 			});
 		</script>
 	</body>

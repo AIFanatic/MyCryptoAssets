@@ -1,3 +1,6 @@
+// Dependencies:
+//
+
 PortfolioJS.prototype.Helpers = new function(){
     this.GenRandomString = function(len){
         return Math.random().toString(36).substring(2, len) + Math.random().toString(36).substring(2, len);

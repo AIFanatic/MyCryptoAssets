@@ -1,3 +1,5 @@
+// Dependencies:
+// - Database
 
 PortfolioJS.prototype.Explorers = new function() {
     //this.multiexplorer = "https://multiexplorer.com/api/address_balance/fallback?address=";
@@ -151,5 +153,35 @@ PortfolioJS.prototype.Explorers = new function() {
                 cb_func(balance);
             });
         }
+    }
+
+    // Coins/Tokens helpers
+    this.GetCoinsFromCMC = function(cb_func){
+        $.ajax({url: this.tickers_url, success: function(result){
+            // Parse coins by key
+            var coins_parsed = {};
+
+            for (var i=0;i<result.length;i++) {
+                var id = result[i]["id"];
+                coins_parsed[id] = result[i];
+            }
+
+            if(cb_func) cb_func(coins_parsed);
+        }});
+    }
+
+    this.GetTokensFromMEW = function(cb_func){
+        $.ajax({url: this.tokens_url, success: function(result){
+            var json = JSON.parse(result);
+            // Parse coins by key
+            var coins_parsed = {};
+
+            for (var i=0;i<json.length;i++) {
+                var id = json[i]["symbol"].toLowerCase();
+                coins_parsed[id] = json[i];
+            }
+
+            cb_func(coins_parsed);
+        }});
     }
 }

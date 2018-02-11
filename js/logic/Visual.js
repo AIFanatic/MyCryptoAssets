@@ -1,3 +1,6 @@
+// Dependencies:
+// - Database
+
 PortfolioJS.prototype.Visual = new function(){
 
     // TODO: Call Helper functions from Helpers file
@@ -24,6 +27,16 @@ PortfolioJS.prototype.Visual = new function(){
         }
         return s.join(dec)
     }
+
+    this.ParseNumber = function(value, type){
+        if(type=="currency"){
+            return this.number_format(value, Database.settings["currency_decimals"], Database.settings["decimal_separator"], Database.settings["thousands_separator"]);
+        }
+        else if (type=="crypto"){
+            return this.number_format(value, Database.settings["crypto_decimals"], Database.settings["decimal_separator"], Database.settings["thousands_separator"]);
+        }
+    }
+
     // End Helpers
 
     this.LoadSettings = function(settings){
@@ -119,7 +132,11 @@ PortfolioJS.prototype.Visual = new function(){
         $("#token_list").html(html);
     }
 
-    this.LoadWalletInfo = function(my_wallet_info){
+    this.UpdateCurrentTotal = function(amount){
+        $("#wallet-current-total-usd").text( this.number_format(amount, 2, ".", ",") + " USD");
+    }
+
+    /*this.LoadWalletInfo = function(my_wallet_info){
         var total_usd = my_wallet_info["total_usd"];
         var prev_total_usd = my_wallet_info["prev_total_usd"];
 
@@ -137,5 +154,42 @@ PortfolioJS.prototype.Visual = new function(){
         $("#wallet-info-total_usd").text( this.number_format(total_usd, 2, ".", ",") + " USD");
 
         $("#wallet-info-change_per").html(change_per_arrow_html+change_per+" %");
+    }*/
+
+    this.UpdateCoin = function(id, coin_info){
+        var wallet_coin_currency = coin_info["currency"].toUpperCase();
+        var wallet_coin_name = coin_info["name"];
+        var wallet_coin_balance = coin_info["balance"];
+
+        var coin_symbol = Database.GetCoinValue(wallet_coin_name, "symbol").toUpperCase();
+        var coin_price = Database.GetCoinValue(wallet_coin_name, "price_usd");
+
+        $("#" + id + "-price-text").text(this.ParseNumber(coin_price, "currency")+" " + wallet_coin_currency);
+        $("#" + id + "-currency-text").text(wallet_coin_currency);
+
+        $("#" + id + "-balance-currency-text").text(this.ParseNumber(wallet_coin_balance*coin_price, "currency") + " " + wallet_coin_currency);
+        $("#" + id + "-balance-crypto-text").text(this.ParseNumber(wallet_coin_balance, "crypto") + " " + coin_symbol);
+    }
+
+    // TODO: Lazy load images
+    this.AddNewTicker = function(coin_info){
+        $(".main-tickers-list").append('\
+        <li class="waves-effect waves coin-list"> \
+            <div class="col s12 m12 no-padding"> \
+                <div class="col s3 m2 valign-wrapper no-padding center"> \
+                    <div class="col s12 m12"> \
+                    <img class="coin-img" src="https://files.coinmarketcap.com/static/img/coins/128x128/' + coin_info["id"] + '.png"> \
+                    </div> \
+                </div> \
+                <div class="col s5 m6"> \
+                    <span class="coin-name">'+ coin_info["name"] +'</span> \
+                    <span class="coin-name-sub">'+this.ParseNumber(coin_info["market_cap_usd"], "currency") + " USD" +'</span> \
+                </div> \
+                <div class="col s4 m3 text-right"> \
+                    <span class="coin-value">'+ this.ParseNumber(coin_info["price_usd"], "currency") +' USD</span> \
+                    <span class="coin-value-sub">'+ coin_info["percent_change_24h"] +'%</span> \
+                </div> \
+            </div> \
+        </li>');
     }
 }

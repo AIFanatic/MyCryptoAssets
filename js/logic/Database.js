@@ -1,8 +1,13 @@
+// Dependencies:
+//
+
 var Database = new function() {
     this.my_wallet = {};
+    this.my_wallet_totals = {};
 
     this.allCoins = [];
     this.allTokens = [];
+    this.settings = {};
 
     // URLs / BC explorers / TODO: port to outside
     this.token_query_url = "http://localhost/portfolio/starter/token_cmc.php"; // Hackish and only required backend, TODO: Remove backend
@@ -10,40 +15,90 @@ var Database = new function() {
     this.tokens_url = "https://raw.githubusercontent.com/kvhnuke/etherwallet/mercury/app/scripts/tokens/ethTokens.json";
     this.tokens_contract_info = "https://api.ethplorer.io/getTokenInfo/"; // add "?apiKey=freekey" to the end
 
-    // Settings
-    this.settings = {};
+    // LocalStorage
+    this.DB_Save = function(name, value){
+        localStorage.setItem(name, value);
+    }
+    this.DB_Load = function(name){
+        var data = localStorage.getItem(name);
+        if(data)
+            return data;
+
+        return null;
+    }
+
+    this.DB_Delete = function(name){
+        localStorage.removeItem(name);
+    }
+
+    this.DB_DeleteAll = function(){
+        localStorage.clear();
+    }
+
+    this.DB_SaveJSON = function(name, valueJSON){
+        localStorage.setItem(name, JSON.stringify(valueJSON));
+    }
+
+    this.DB_LoadJSON = function(name){
+        var data = localStorage.getItem(name);
+        if(data){
+            return JSON.parse(data);
+        }
+        return null;
+    }
+    // END LocalStorage
 
     // LOAD/SAVE
     // All coins
     this.Load_AllCoins = function(){
-        this.allCoins = Storage.Get_AllCoins();
+        this.allCoins = this.DB_LoadJSON("allCoins");
     }
     this.Save_AllCoins = function(coins){
-        Storage.Set_AllCoins(coins);
+        this.DB_SaveJSON("allCoins", coins);
         this.Load_AllCoins();
     }
 
     // All tokens
     this.Load_AllTokens = function(){
-        this.allTokens = Storage.Get_AllTokens();
+        this.allTokens = this.DB_LoadJSON("allTokens");
     }
     this.Save_AllTokens = function(tokens){
-        Storage.Set_AllTokens(tokens);
+        this.DB_SaveJSON("allTokens", tokens);
         this.Load_AllTokens();
     }
 
     // Wallet
     this.Load_Wallet = function(){
-        this.my_wallet = Storage.Get_Wallet();
+        this.my_wallet = this.DB_LoadJSON("wallet");
+
+        if(!this.my_wallet){
+            this.my_wallet = {}
+            this.Save_Wallet(this.my_wallet);
+        }
     }
     this.Save_Wallet = function(wallet){
-        Storage.Set_Wallet(wallet);
+        this.DB_SaveJSON("wallet", wallet);
         this.Load_Wallet();
     }
 
+    this.Load_WalletTotals = function(){
+        this.my_wallet_totals = this.DB_LoadJSON("wallet_totals");
+
+        if(!this.my_wallet_totals){
+            this.my_wallet_totals = Templates.wallet_totals;
+            this.Save_WalletTotals(this.my_wallet_totals);
+        }
+    }
+    this.Save_WalletTotals = function(wallet_totals){
+        this.DB_SaveJSON("wallet_totals", wallet_totals);
+        this.Load_Wallet();
+    }
+
+
+
     // Settings
     this.Load_Settings = function(){
-        this.settings = Storage.Get_Settings();
+        this.settings = this.DB_LoadJSON("settings");
 
         if(!this.settings){
             this.settings = Templates.settings;
@@ -51,12 +106,23 @@ var Database = new function() {
         }
     }
     this.Save_Settings = function(settings){
-        Storage.Set_Settings(settings);
+        this.DB_SaveJSON("settings", settings);
         this.Load_Settings();
     }
     // END LOAD/SAVE
 
+    // COINS
+    this.GetCoinValue = function(id, value){
+        if(this.allCoins[id] !== undefined && this.allCoins[id][value] !== undefined){
+            return this.allCoins[id][value];
+        }
+        return false;
+    };
+    // END COINS
+
     // WALLET FUNCTIONS
+
+    // Wallet
     this.Wallet_Add = function(id, data){
         this.my_wallet[id] = data;
         this.Save_Wallet(this.my_wallet);
@@ -71,6 +137,18 @@ var Database = new function() {
         this.my_wallet[id]["balance"] = balance;
         this.Save_Wallet(this.my_wallet);
     }
+
+    // Wallet totals
+    this.Wallet_UpdateCurrentTotal = function(amount){
+        this.my_wallet_totals["current_total_usd"] = amount;
+        this.Save_WalletTotals(this.my_wallet_totals);
+    }
+
+    this.Wallet_UpdatePreviousTotal = function(amount){
+        this.my_wallet_totals["prev_total_usd"] = amount;
+        this.Save_WalletTotals(this.my_wallet_totals);
+    }
+
     // END WALLET FUNCTIONS
 
     this.Init = function(){
@@ -78,6 +156,7 @@ var Database = new function() {
         this.Load_AllTokens();
         
         this.Load_Wallet();
+        this.Load_WalletTotals();
         this.Load_Settings();
 
         console.log("called");
