@@ -3,7 +3,7 @@
 
 var Database = new function() {
     this.my_wallet = {};
-    this.my_wallet_totals = {};
+    this.my_wallet_info = {};
 
     this.allCoins = [];
     this.allTokens = [];
@@ -81,16 +81,17 @@ var Database = new function() {
         this.Load_Wallet();
     }
 
-    this.Load_WalletTotals = function(){
-        this.my_wallet_totals = this.DB_LoadJSON("wallet_totals");
+    this.Load_WalletInfo = function(){
+        this.my_wallet_info = this.DB_LoadJSON("wallet_info");
 
-        if(!this.my_wallet_totals){
-            this.my_wallet_totals = Templates.wallet_totals;
-            this.Save_WalletTotals(this.my_wallet_totals);
+        if(!this.my_wallet_info){
+            this.my_wallet_info = Templates.wallet_info;
+            this.Save_WalletInfo(this.my_wallet_info);
         }
     }
-    this.Save_WalletTotals = function(wallet_totals){
-        this.DB_SaveJSON("wallet_totals", wallet_totals);
+
+    this.Save_WalletInfo = function(wallet_info){
+        this.DB_SaveJSON("wallet_info", wallet_info);
         this.Load_Wallet();
     }
 
@@ -138,16 +139,31 @@ var Database = new function() {
         this.Save_Wallet(this.my_wallet);
     }
 
-    // Wallet totals
-    this.Wallet_UpdateCurrentTotal = function(amount){
-        this.my_wallet_totals["current_total_usd"] = amount;
-        this.Save_WalletTotals(this.my_wallet_totals);
+    // Wallet Info
+    this.WalletInfo_UpdateCurrentTotal = function(amount){
+        this.my_wallet_info["current_total_usd"] = amount;
+        this.my_wallet_info["last_update_total_epoch"] = new Date().getTime();
+        this.Save_WalletInfo(this.my_wallet_info);
     }
 
-    this.Wallet_UpdatePreviousTotal = function(amount){
-        this.my_wallet_totals["prev_total_usd"] = amount;
-        this.Save_WalletTotals(this.my_wallet_totals);
+    this.WalletInfo_UpdatePreviousTotal = function(){
+        this.my_wallet_info["prev_total_usd"] = this.my_wallet_info["current_total_usd"];
+        this.my_wallet_info["last_update_change_epoch"] = new Date().getTime();
+        this.Save_WalletInfo(this.my_wallet_info);
     }
+
+    // Wallet Info Epochs
+    this.WalletInfo_UpdateChangeEpoch = function(time){
+        this.my_wallet_info["last_update_change_epoch"] = time;
+        this.Save_WalletInfo(this.my_wallet_info);
+    }
+
+    this.WalletInfo_UpdateWalletEpoch = function(time){
+        this.my_wallet_info["last_update_wallet_epoch"] = time;
+        this.Save_WalletInfo(this.my_wallet_info);
+    }
+
+
 
     // END WALLET FUNCTIONS
 
@@ -156,7 +172,7 @@ var Database = new function() {
         this.Load_AllTokens();
         
         this.Load_Wallet();
-        this.Load_WalletTotals();
+        this.Load_WalletInfo();
         this.Load_Settings();
 
         console.log("called");

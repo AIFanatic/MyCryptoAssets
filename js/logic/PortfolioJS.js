@@ -25,25 +25,19 @@ function PortfolioJS() {
         this.Wallet_DeleteAll();
     }
 
-    this.LoadCoins = function(force=false, cb=false){
-        console.log("Load coins");
-        var current_time = new Date().getTime();
-
-        var coins_epoch = Database.DB_Load("allCoins_epoch");
-
-        console.log((current_time-coins_epoch)/1000);
-
-        if( (current_time-coins_epoch)/1000 > (7*24*60*60) || force){
+    this.LoadCoins = function(forceReload=false, cb=false){
+        if(!Database.allCoins || forceReload){
             this.Explorers.GetCoinsFromCMC(function(allCoins){
                 // Loaded
                 Database.Save_AllCoins(allCoins);
                 Database.DB_Save("allCoins_epoch", new Date().getTime());
 
                 self.Visual.LoadCoinsMenu(Database.allCoins);
+
+                if(cb) cb();
             });
         }
         else{
-            // Loaded
             self.Visual.LoadCoinsMenu(Database.allCoins);
 
             if(cb) cb();
@@ -55,13 +49,10 @@ function PortfolioJS() {
         Database.DB_Delete("allCoins_epoch");
     }
 
-    this.LoadTokens = function(force=false){
+    this.LoadTokens = function(forceReload=false){
         console.log("Load Tokens");
-        var current_time = new Date().getTime();
 
-        var coins_epoch = Database.DB_Load("allTokens_epoch");
-
-        if( (current_time-coins_epoch)/1000 > (7*24*60*60) || force){
+        if( !Database.allTokens || forceReload){
             this.Explorers.GetTokensFromMEW(function(allTokens){
                 Database.Save_AllTokens(allTokens);
                 Database.DB_Save("allTokens_epoch", new Date().getTime());
@@ -98,7 +89,7 @@ function PortfolioJS() {
     // WALLET
     this.Wallet_DeleteAll = function(){
         Database.DB_Delete("wallet");
-        Database.DB_Delete("wallet_totals");
+        Database.DB_Delete("wallet_info");
     }
 
     this.Wallet_AddNew = function (type, coin, currency) {
@@ -128,6 +119,7 @@ function PortfolioJS() {
         this.Visual.RemoveCoin(id);
 
         self.Wallet_RefreshCurrentTotal();
+        self.Wallet_RefreshChangePer();
     }
 
     this.Wallet_RefreshBalance = function(id){
@@ -140,17 +132,46 @@ function PortfolioJS() {
             self.Visual.UpdateCoin(id, new_coin);
 
             self.Wallet_RefreshCurrentTotal();
+            self.Wallet_RefreshChangePer();
         });
     }
 
+    this.Wallet_RefreshBalances = function(id){
+        console.log("Wallet_RefreshBalances");
 
-    this.Wallet_RefreshCurrentTotal = function(){
-        var wallet_current_total = self.Wallet_GetTotalUSD();
-        Database.Wallet_UpdateCurrentTotal(wallet_current_total);
-        self.Visual.UpdateCurrentTotal(wallet_current_total);
+        for(coin in Database.my_wallet){
+            this.Wallet_RefreshBalance(coin);
+        }
+
+        Database.WalletInfo_UpdateWalletEpoch(this.Helpers.GetCurrentTime());        
     }
 
-    
+    // WALLET INFO
+    this.Wallet_RefreshCurrentTotal = function(){
+        var wallet_current_total = this.Wallet_GetTotalUSD();
+        var wallet_previous_total = Database.my_wallet_info["prev_total_usd"];
+
+        Database.WalletInfo_UpdateCurrentTotal(wallet_current_total);
+
+        // Update previous balance if its 0
+        if(wallet_previous_total==0){
+            this.Wallet_RefreshPreviousTotal();
+        }
+        this.Visual.UpdateCurrentTotal(wallet_current_total);
+    }
+
+    // TODO: Should link previous total with change percentage into one function as they affect each other
+    this.Wallet_RefreshPreviousTotal = function(){
+        Database.WalletInfo_UpdatePreviousTotal();
+        this.Wallet_RefreshChangePer();
+    }
+
+    this.Wallet_RefreshChangePer = function(){
+        var wallet_change_per = this.Wallet_GetChangePer();
+
+        this.Visual.UpdateCurrentChange(wallet_change_per);
+    }
+
     
     this.Wallet_Load = function(){
         // TODO: Remove hard coded element class
@@ -165,6 +186,7 @@ function PortfolioJS() {
 
         // Update wallet total
         this.Wallet_RefreshCurrentTotal();
+        this.Wallet_RefreshChangePer();
     }
 
     this.Wallet_GetTotalUSD = function(){
@@ -180,8 +202,30 @@ function PortfolioJS() {
         return total;
     }
 
+    this.Wallet_GetChangePer = function(){
+        var change_per = this.Helpers.CalculateDiffPer(Database.my_wallet_info["prev_total_usd"], Database.my_wallet_info["current_total_usd"]);
+
+        return change_per;
+    }
+
     // END WALLET
 
+    // TIMERS
+    this.Timer_UpdateCoinData = function(){
+        // Update coin names, token names and prices from CMC
+        this.LoadCoins(true);
+        this.LoadTokens(true);
+    }
+
+    this.Timer_UpdateWallet = function(){
+        // Update wallet balances
+        this.Wallet_RefreshBalances();
+    }
+
+    this.Timer_UpdateChangePer = function(){
+        // Updates wallet info total percentage change
+        this.Wallet_RefreshPreviousTotal();
+    }
     // END TIMERS
 
     this.init = function(){

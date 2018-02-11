@@ -136,6 +136,32 @@ PortfolioJS.prototype.Visual = new function(){
         $("#wallet-current-total-usd").text( this.number_format(amount, 2, ".", ",") + " USD");
     }
 
+    // TODO: Based on amount show arrows, red, green etc
+    this.UpdateCurrentChange = function(amount_percent){
+        //blue-text text-darken-2
+
+        /*<h4 id="wallet-change-total-per" class="header center light-gray-text main-profit-change-per" style="margin-top:0px;">
+            <i id="wallet-change-total-per-arrow" class="material-icons">arrow_upward</i>
+            <span id="wallet-change-total-per-value">0.00</span> %
+        </h4>*/
+
+        console.log(amount_percent);
+        if(amount_percent == 0 ){
+            $("#wallet-change-total-per").css("color", Templates.neutral_color);
+            $("#wallet-change-total-per-arrow").text("");
+        }
+        else if(amount_percent < 0 ){
+            $("#wallet-change-total-per").css("color", Templates.negative_color);
+            $("#wallet-change-total-per-arrow").text("arrow_downward");
+        }
+        else if(amount_percent > 0 ){
+            $("#wallet-change-total-per").css("color", Templates.positive_color);
+            $("#wallet-change-total-per-arrow").text("arrow_upward");
+        }
+
+        $("#wallet-change-total-per-value").html(amount_percent);
+    }
+
     /*this.LoadWalletInfo = function(my_wallet_info){
         var total_usd = my_wallet_info["total_usd"];
         var prev_total_usd = my_wallet_info["prev_total_usd"];

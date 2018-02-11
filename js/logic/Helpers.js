@@ -29,4 +29,12 @@ PortfolioJS.prototype.Helpers = new function(){
         }
         return s.join(dec)
     }
+
+    this.GetCurrentTime = function(){
+        return new Date().getTime();
+    }
+
+    this.CalculateDiffPer = function(prev_amount, current_amount){
+        return this.number_format(((current_amount*100)/prev_amount)-100, 2, ".", ","); // Percentage is always 2 digits
+    }
 }
