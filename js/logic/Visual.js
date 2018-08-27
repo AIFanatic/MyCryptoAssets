@@ -1,7 +1,7 @@
 // Dependencies:
 // - Database
 
-PortfolioJS.prototype.Visual = new function(){
+var Visual = new function() {
 
     // TODO: Call Helper functions from Helpers file
     this.number_format = function number_format(number, decimals, decPoint, thousandsSep) {
@@ -26,6 +26,18 @@ PortfolioJS.prototype.Visual = new function(){
             s[1] += new Array(prec - s[1].length + 1).join('0')
         }
         return s.join(dec)
+    }
+
+    this.getColorForPercentage = function(percentage) {
+        if (percentage==0) {
+            return Templates.neutral_color;
+        }
+        else if (percentage < 0) {
+            return Templates.negative_color;
+        }
+        else if (percentage > 0) {
+            return Templates.positive_color;
+        }
     }
 
     this.ParseNumber = function(value, type){
@@ -56,13 +68,14 @@ PortfolioJS.prototype.Visual = new function(){
 
         for (var coin in allCoins) {
             var id = allCoins[coin]["id"];
-            var name = allCoins[id]["name"];
+            var name = allCoins[coin]["name"];
+            var symbol = allCoins[coin]["symbol"];
 
             if(isNaN(name)){
 
-                var first_letter = id.slice(0, 1);
+                var first_letter = name.slice(0, 1);
 
-                var coin_html = '<option style="background-image: url(https://files.coinmarketcap.com/static/img/coins/32x32/bitcoin-cash.png)" value="' + id + '">' + name + '</option>';
+                var coin_html = '<option style="background-image: url(https://files.coinmarketcap.com/static/img/coins/32x32/bitcoin-cash.png)" value="' + name + '">' + name + '</option>';
 
                 var coin_group = $(".list-group-" + first_letter);
 
@@ -73,7 +86,7 @@ PortfolioJS.prototype.Visual = new function(){
                 }
 
                 // Setup coin background
-                coin_style.append('[data-val="' + id + '"] .dw-i{ background-image: url(https://files.coinmarketcap.com/static/img/coins/32x32/' + id + '.png); }');
+                coin_style.append('[data-val="' + name + '"] .dw-i{ background-image: url(https://s2.coinmarketcap.com/static/img/coins/64x64/' + id + '.png); }');
             }
         }
 
@@ -83,12 +96,15 @@ PortfolioJS.prototype.Visual = new function(){
 
     // TODO: Add this.ParseNumber to -price-text
     this.AddNewCoin = function(id, new_coin){
+
+        var coinID = Database.GetCoinValue(new_coin["name"], "id");
+
         $(".coins-balance-list").append('\
         <li id="'+ id +'" class="waves-effect waves coin-list"> \
             <div class="col s12 m12 no-padding"> \
                 <div class="col s3 m2 valign-wrapper no-padding center"> \
                     <div class="col s12 m12"> \
-                    <img class="coin-img" src="https://files.coinmarketcap.com/static/img/coins/128x128/' + new_coin["name"] + '.png"> \
+                    <img class="coin-img" src="https://s2.coinmarketcap.com/static/img/coins/64x64/' + coinID + '.png"> \
                     </div> \
                 </div> \
                 <div class="col s5 m6"> \
@@ -145,7 +161,7 @@ PortfolioJS.prototype.Visual = new function(){
             <span id="wallet-change-total-per-value">0.00</span> %
         </h4>*/
 
-        console.log(amount_percent);
+        console.log("Amount percent: " + amount_percent);
         if(amount_percent == 0 ){
             $("#wallet-change-total-per").css("color", Templates.neutral_color);
             $("#wallet-change-total-per-arrow").text("");
@@ -159,28 +175,8 @@ PortfolioJS.prototype.Visual = new function(){
             $("#wallet-change-total-per-arrow").text("arrow_upward");
         }
 
-        $("#wallet-change-total-per-value").html(amount_percent);
+        $("#wallet-change-total-per-value").html(Helpers.number_format(amount_percent, 2, ".", ","));
     }
-
-    /*this.LoadWalletInfo = function(my_wallet_info){
-        var total_usd = my_wallet_info["total_usd"];
-        var prev_total_usd = my_wallet_info["prev_total_usd"];
-
-        var change_per = this.number_format(((total_usd*100)/prev_total_usd)-100, 2);
-
-        if(change_per==-100) change_per = 0;
-        
-        var change_per_arrow_html = "";
-        
-        if(change_per == 0 ) change_per_arrow_html = "";
-        else if(change_per < 0 ) change_per_arrow_html = '<i class="material-icons">arrow_downward</i>';
-        else if(change_per > 0 ) change_per_arrow_html = '<i class="material-icons">arrow_upward</i>';
-
-        // TODO: Make currency dynamic
-        $("#wallet-info-total_usd").text( this.number_format(total_usd, 2, ".", ",") + " USD");
-
-        $("#wallet-info-change_per").html(change_per_arrow_html+change_per+" %");
-    }*/
 
     this.UpdateCoin = function(id, coin_info){
         var wallet_coin_currency = coin_info["currency"].toUpperCase();
@@ -189,6 +185,11 @@ PortfolioJS.prototype.Visual = new function(){
 
         var coin_symbol = Database.GetCoinValue(wallet_coin_name, "symbol").toUpperCase();
         var coin_price = Database.GetCoinValue(wallet_coin_name, "price_usd");
+
+        console.log(id);
+        console.log(wallet_coin_name);
+        console.log(coin_price);
+        console.log(coin_info);
 
         $("#" + id + "-price-text").text(this.ParseNumber(coin_price, "currency")+" " + wallet_coin_currency);
         $("#" + id + "-currency-text").text(wallet_coin_currency);
@@ -199,21 +200,22 @@ PortfolioJS.prototype.Visual = new function(){
 
     // TODO: Lazy load images
     this.AddNewTicker = function(coin_info){
+        //
         $(".main-tickers-list").append('\
         <li class="waves-effect waves coin-list"> \
             <div class="col s12 m12 no-padding"> \
                 <div class="col s3 m2 valign-wrapper no-padding center"> \
                     <div class="col s12 m12"> \
-                    <img class="coin-img" src="https://files.coinmarketcap.com/static/img/coins/128x128/' + coin_info["id"] + '.png"> \
+                    <img class="coin-img" src="https://s2.coinmarketcap.com/static/img/coins/64x64/' + coin_info["id"] + '.png"> \
                     </div> \
                 </div> \
                 <div class="col s5 m6"> \
                     <span class="coin-name">'+ coin_info["name"] +'</span> \
-                    <span class="coin-name-sub">'+this.ParseNumber(coin_info["market_cap_usd"], "currency") + " USD" +'</span> \
+                    <span class="coin-name-sub">'+this.ParseNumber(coin_info["market_cap"], "currency") + " USD" +'</span> \
                 </div> \
                 <div class="col s4 m3 text-right"> \
                     <span class="coin-value">'+ this.ParseNumber(coin_info["price_usd"], "currency") +' USD</span> \
-                    <span class="coin-value-sub">'+ coin_info["percent_change_24h"] +'%</span> \
+                    <span class="coin-value-sub" style="color: ' + this.getColorForPercentage(coin_info["percent_change_24h"]) + '">'+ coin_info["percent_change_24h"] +'%</span> \
                 </div> \
             </div> \
         </li>');

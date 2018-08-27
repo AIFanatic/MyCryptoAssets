@@ -39,6 +39,10 @@ body{
 	.main-profit-total-usd{
 		font-size: 40px;
 	}
+
+	.settings-title {
+		padding-left: 10px !important;
+	}
 }
 
 .text-menu{
@@ -214,14 +218,18 @@ main ul li{
     align-items: center;
 }
 
+.settings-title {
+	padding-left: 50px;
+}
+
 .info-box{
 	position: absolute;
 	background: var(--side-content-bg-color);
 	right: 0 !important;
 	height: 100%;
 	text-align: center;
-	border-top-right-radius: 5px;
-	border-bottom-right-radius: 5px;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
 
 	display: none;
 }

@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-		<title>Starter Template - Materialize</title>
+		<title>MyCryptoAssets</title>
 		<!-- CSS  -->
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
@@ -41,6 +41,7 @@
 				<li id="nav-portfolio" class="active"><a data-content="portfolio" class="nav-link side-menu-btn" href="#"><i class="material-icons nav-link">account_balance_wallet</i>My Portfolio</a></li>
 				<li id="nav-tickers" ><a data-content="tickers" class="nav-link side-menu-btn" href="#"><i class="material-icons nav-link">insert_chart</i>Tickers</a></li>
 				<li id="nav-settings" ><a data-content="settings" class="nav-link side-menu-btn" href="#"><i class="material-icons nav-link">settings</i>Settings</a></li>
+				<li id="nav-debug" ><a data-content="debug" class="nav-link side-menu-btn" href="#"><i class="material-icons nav-link">bug_report</i>Debug</a></li>
 			</ul>
 		</div>
 
@@ -50,155 +51,225 @@
 					<div class="indeterminate"></div>
 				</div>
 				
-				<div class="container" style="width: 85% !important;">
-					<h1 id="wallet-current-total-usd" class="header center light-blue-text main-profit-total-usd" style="margin-bottom:0px;">1920.01</h1>
-					<h4 id="wallet-change-total-per" class="header center main-profit-change-per" style="margin-top:0px;"><i id="wallet-change-total-per-arrow" class="material-icons">arrow_upward</i> <span id="wallet-change-total-per-value">0.00</span> %</h4>
-					<div class="row">
-						<ul class="coins-balance-list">
-						</ul>
-					</div>
-					<br><br>
+				<h1 id="wallet-current-total-usd" class="header center light-blue-text main-profit-total-usd" style="margin-bottom:0px;">1920.01</h1>
+				<h4 id="wallet-change-total-per" class="header center main-profit-change-per" style="margin-top:0px;"><i id="wallet-change-total-per-arrow" class="material-icons">arrow_upward</i> <span id="wallet-change-total-per-value">0.00</span> %</h4>
+				<div class="row">
+					<ul class="coins-balance-list">
+					</ul>
 				</div>
 			</div>
 
 			<div id="main-tickers" class="section no-pad-bot" style="display: none;">
-				<div class="container" style="width: 85% !important;">
-					<div class="row">
-						<ul class="main-tickers-list">
-						</ul>
-					</div>
-					<br><br>
+				<div class="row">
+					<ul class="main-tickers-list">
+					</ul>
 				</div>
 			</div>
 
 			<div id="main-settings" class="section no-pad-bot" style="display: none;">
-				<div class="container" style="width: 85% !important;">
-					<div class="row">
-						<ul class="main-settings-list">
+				<div class="row">
+					<ul class="main-settings-list">
 
-							<li>
+						<li>
+							<div class="col s12 m12 no-padding">
+								<div class="col s8 m10">
+									<span class="coin-name settings-title">Coins to fetch by cap</span>
+								</div>
+								<div class="col s4 m2 text-right">
+									<div class="input-field col s12">
+										<select class="settings-select" id="settings-coins_max">
+											<option value="100">100</option>
+											<option value="200">200</option>
+											<option value="500">500</option>
+											<option value="1000">1000</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</li>
+
+						<li>
+							<div class="col s12 m12 no-padding">
+								<div class="col s8 m10">
+									<span class="coin-name settings-title">Refresh tickers</span>
+								</div>
+								<div class="col s4 m2 text-right">
+									<div class="input-field col s12">
+										<select class="settings-select" id="settings-refresh_tickers_sec">
+											<option value="60">1 Min</option>
+											<option value="120">2 Mins</option>
+											<option value="300">5 Mins</option>
+											<option value="900">15 Mins</option>
+											<option value="3600">1 Hour</option>
+											<option value="43200">12 Hours</option>
+											<option value="86400">24 Hours</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</li>
+
+						<li>
+							<div class="col s12 m12 no-padding">
+								<div class="col s8 m10">
+									<span class="coin-name settings-title">Refresh portfolio balances</span>
+								</div>
+								<div class="col s4 m2 text-right">
+									<div class="input-field col s12">
+										<select class="settings-select" id="settings-refresh_portfolio_balances_sec">
+											<option value="60">1 Min</option>
+											<option value="120">2 Mins</option>
+											<option value="300">5 Mins</option>
+											<option value="900">15 Mins</option>
+											<option value="3600">1 Hour</option>
+											<option value="43200">12 Hours</option>
+											<option value="86400">24 Hours</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</li>
+
+						<li>
+							<div class="col s12 m12 no-padding">
+								<div class="col s8 m10">
+									<span class="coin-name settings-title">Refresh portfolio metrics</span>
+								</div>
+								<div class="col s4 m2 text-right">
+									<div class="input-field col s12">
+										<select class="settings-select" id="settings-refresh_portfolio_metrics_sec">
+											<option value="60">1 Min</option>
+											<option value="120">2 Mins</option>
+											<option value="300">5 Mins</option>
+											<option value="900">15 Mins</option>
+											<option value="3600">1 Hour</option>
+											<option value="43200">12 Hours</option>
+											<option value="86400">24 Hours</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</li>
+
+						<li>
+							<div class="col s12 m12 no-padding">
+								<div class="col s8 m10">
+									<span class="coin-name settings-title">Currency decimals</span>
+								</div>
+								<div class="col s4 m2 text-right">
+									<div class="input-field col s12">
+										<select class="settings-select" id="settings-currency_decimals">
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+											<option value="4">4</option>
+											<option value="5">5</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</li>
+
+						<li>
+							<div class="col s12 m12 no-padding">
+								<div class="col s8 m10">
+									<span class="coin-name settings-title">Crypto decimals</span>
+								</div>
+								<div class="col s4 m2 text-right">
+									<div class="input-field col s12">
+										<select class="settings-select" id="settings-crypto_decimals">
+											<option value="1">1</option>
+											<option value="2">2</option>
+											<option value="3">3</option>
+											<option value="4">4</option>
+											<option value="5">5</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</li>
+
+						<li>
+							<div class="col s12 m12 no-padding">
+								<div class="col s8 m10">
+									<span class="coin-name settings-title">Decimal separator</span>
+								</div>
+								<div class="col s4 m2 text-right">
+									<div class="input-field col s12">
+										<select class="settings-select" id="settings-decimal_separator">
+											<option value=".">Dot</option>
+											<option value=",">Comma</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</li>
+
+						<li>
+							<div class="col s12 m12 no-padding">
+								<div class="col s8 m10">
+									<span class="coin-name settings-title">Thousands separator</span>
+								</div>
+								<div class="col s4 m2 text-right">
+									<div class="input-field col s12">
+										<select class="settings-select" id="settings-thousands_separator">
+											<option value=".">Dot</option>
+											<option value=",">Comma</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</li>
+
+						<li class="waves-effect waves red lighten-5" id="settings-delete-all">
+							<div class="col s12 m12 no-padding">
+								<div class="col s12 m12">
+									<span class="coin-name settings-title">Delete all data</span>
+								</div>
+							</div>
+						</li>
+
+					</ul>
+				</div>
+			</div>
+
+			<div id="main-debug" class="section no-pad-bot" style="display: none;">
+				<div class="row">
+					<ul class="main-settings-list">
+
+						<li>
+							<div class="col s12 m12 no-padding">
+								<div class="col s8 m10">
+									<span class="coin-name settings-title">Next tickers refresh</span>
+								</div>
+								<div class="col s4 m2 text-right">
+									<span id="next-tickers-refresh">Next tickers refresh</span>
+								</div>
+							</div>
+						</li>
+
+						<li>
+							<div class="col s12 m12 no-padding">
+								<div class="col s8 m10">
+									<span class="coin-name settings-title">Next portfolio balances refresh</span>
+								</div>
+								<div class="col s4 m2 text-right">
+									<span id="next-portfolio-balances-refresh">Next portfolio balances refresh</span>
+								</div>
+							</div>
+						</li>
+
+						<li>
 								<div class="col s12 m12 no-padding">
 									<div class="col s8 m10">
-										<span class="coin-name">Refresh data interval</span>
+										<span class="coin-name settings-title">Next portfolio metrics refresh</span>
 									</div>
 									<div class="col s4 m2 text-right">
-										<div class="input-field col s12">
-											<select class="settings-select" id="settings-refresh_data_mins">
-												<option value="1">1 Min</option>
-												<option value="2">2 Mins</option>
-												<option value="5">5 Mins</option>
-												<option value="15">15 Mins</option>
-												<option value="60">1 Hour</option>
-												<option value="720">12 Hours</option>
-												<option value="1440">24 Hours</option>
-											</select>
-										</div>
+										<span id="next-portfolio-metrics-refresh">Next portfolio metrics refresh</span>
 									</div>
 								</div>
 							</li>
-
-							<li>
-								<div class="col s12 m12 no-padding">
-									<div class="col s8 m10">
-										<span class="coin-name">Refresh wallet metrics interval</span>
-									</div>
-									<div class="col s4 m2 text-right">
-										<div class="input-field col s12">
-											<select class="settings-select" id="settings-refresh_wallet_metrics_mins">
-												<option value="1">1 Min</option>
-												<option value="2">2 Mins</option>
-												<option value="5">5 Mins</option>
-												<option value="15">15 Mins</option>
-												<option value="60">1 Hour</option>
-												<option value="720">12 Hours</option>
-												<option value="1440">24 Hours</option>
-											</select>
-										</div>
-									</div>
-								</div>
-							</li>
-
-							<li>
-								<div class="col s12 m12 no-padding">
-									<div class="col s8 m10">
-										<span class="coin-name">Currency decimals</span>
-									</div>
-									<div class="col s4 m2 text-right">
-										<div class="input-field col s12">
-											<select class="settings-select" id="settings-currency_decimals">
-												<option value="1">1</option>
-												<option value="2">2</option>
-												<option value="3">3</option>
-												<option value="4">4</option>
-												<option value="5">5</option>
-											</select>
-										</div>
-									</div>
-								</div>
-							</li>
-
-							<li>
-								<div class="col s12 m12 no-padding">
-									<div class="col s8 m10">
-										<span class="coin-name">Crypto decimals</span>
-									</div>
-									<div class="col s4 m2 text-right">
-										<div class="input-field col s12">
-											<select class="settings-select" id="settings-crypto_decimals">
-												<option value="1">1</option>
-												<option value="2">2</option>
-												<option value="3">3</option>
-												<option value="4">4</option>
-												<option value="5">5</option>
-											</select>
-										</div>
-									</div>
-								</div>
-							</li>
-
-							<li>
-								<div class="col s12 m12 no-padding">
-									<div class="col s8 m10">
-										<span class="coin-name">Decimal separator</span>
-									</div>
-									<div class="col s4 m2 text-right">
-										<div class="input-field col s12">
-											<select class="settings-select" id="settings-decimal_separator">
-												<option value=".">Dot</option>
-												<option value=",">Comma</option>
-											</select>
-										</div>
-									</div>
-								</div>
-							</li>
-
-							<li>
-								<div class="col s12 m12 no-padding">
-									<div class="col s8 m10">
-										<span class="coin-name">Thousands separator</span>
-									</div>
-									<div class="col s4 m2 text-right">
-										<div class="input-field col s12">
-											<select class="settings-select" id="settings-thousands_separator">
-												<option value=".">Dot</option>
-												<option value=",">Comma</option>
-											</select>
-										</div>
-									</div>
-								</div>
-							</li>
-
-							<li class="waves-effect waves red lighten-5" id="settings-delete-all">
-								<div class="col s12 m12 no-padding">
-									<div class="col s12 m12">
-										<span class="coin-name">Delete all data</span>
-									</div>
-								</div>
-							</li>
-
-						</ul>
-					</div>
-					<br><br>
+					</ul>
 				</div>
 			</div>
 
@@ -267,13 +338,14 @@
 
 		<script src="js/manager.js"></script>
 
+		<script src="js/logic/Helpers.js"></script>
 		<script src="js/logic/Templates.js"></script>
 		<script src="js/logic/Database.js"></script>
 		<script src="js/logic/PortfolioJS.js"></script>
-		<script src="js/logic/Helpers.js"></script>
 		<script src="js/logic/Visual.js"></script>
 		<script src="js/logic/Explorers.js"></script>
 		<script src="js/logic/Wallet.js"></script>
+		<script src="js/logic/Debug.js"></script>
 
 		<script>
 			$( document ).ready(function() {
@@ -338,7 +410,7 @@
 				onClose: function(event, inst) {
 					setTimeout(function() {
 						//CreateNew_Coin(new_type, "", "");
-						portfolioJS.Wallet_AddNew("coin", "", "");
+						portfolioJS.Wallet.AddNew("coin", "", "");
 			
 					}, 200);
 				}
@@ -386,12 +458,12 @@
 			// Info box clicks
 			$(document).on('click', '#main-portfolio .info-box .delete-btn', function(){
 				var coin = GetCoinFromID(this.id);
-				portfolioJS.Wallet_Delete(coin);
+				portfolioJS.Wallet.Delete(coin);
 			});
 
 			$(document).on('click', '#main-portfolio .info-box .refresh-btn', function(){
 				var coin = GetCoinFromID(this.id);
-				portfolioJS.Wallet_RefreshBalance(coin);
+				portfolioJS.Wallet.RefreshBalance(coin);
 			});
 
 			$(document).on('change', 'select.settings-select', function() {

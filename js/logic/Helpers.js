@@ -1,7 +1,7 @@
 // Dependencies:
 //
 
-PortfolioJS.prototype.Helpers = new function(){
+var Helpers = new function(){
     this.GenRandomString = function(len){
         return Math.random().toString(36).substring(2, len) + Math.random().toString(36).substring(2, len);
     }
@@ -27,6 +27,7 @@ PortfolioJS.prototype.Helpers = new function(){
             s[1] = s[1] || ''
             s[1] += new Array(prec - s[1].length + 1).join('0')
         }
+
         return s.join(dec)
     }
 
@@ -35,6 +36,6 @@ PortfolioJS.prototype.Helpers = new function(){
     }
 
     this.CalculateDiffPer = function(prev_amount, current_amount){
-        return this.number_format(((current_amount*100)/prev_amount)-100, 2, ".", ","); // Percentage is always 2 digits
+        return ((current_amount*100)/prev_amount)-100;
     }
 }
